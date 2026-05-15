@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELT Final - 150 MCQ | إعداد ياسر عمار عبد </title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141728;
+    --card: #1a1f35;
+    --border: #252b45;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --gold: #f5c842;
+    --correct: #00c87a;
+    --text: #e8eaf6;
+    --muted: #8892b0;
+    --red: #ff4757;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Tajawal', sans-serif;
+    min-height: 100vh;
+    direction: rtl;
+  }
+
+  /* ===== MUSIC PLAYER ===== */
+  .music-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: linear-gradient(135deg, #1a0533 0%, #0d1a3a 50%, #001a2e 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 4px 30px rgba(108,99,255,0.3);
+    flex-wrap: wrap;
+  }
+
+  .music-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--gold);
+    white-space: nowrap;
+    letter-spacing: 1px;
+  }
+
+  .music-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 260px;
+  }
+
+  .track-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 130px;
+  }
+
+  .track-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .track-sub {
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .btn-play {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 50%;
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    color: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+    flex-shrink: 0;
+  }
+  .btn-play:hover { transform: scale(1.1); box-shadow: 0 0 15px rgba(108,99,255,0.5); }
+
+  .btn-next, .btn-prev {
+    background: var(--border);
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    padding: 5px 12px;
+    color: var(--text);
+    font-size: 11px;
+    cursor: pointer;
+    font-family: 'Tajawal', sans-serif;
+    transition: background 0.2s;
+  }
+  .btn-next:hover, .btn-prev:hover { background: var(--accent); }
+
+  .progress-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 120px;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.3s;
+    pointer-events: none;
+  }
+
+  .time-label {
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .volume-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .volume-wrap input[type=range] {
+    width: 70px;
+    accent-color: var(--accent);
+  }
+
+  /* ===== HEADER ===== */
+  .hero {
+    background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0a1628 100%);
+    padding: 50px 20px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(108,99,255,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(0,212,170,0.1) 0%, transparent 60%);
+  }
+  .hero-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: 'Tajawal', sans-serif;
+    font-size: clamp(22px, 4vw, 42px);
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero p {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .stat-box {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 20px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--accent2);
+    line-height: 1;
+  }
+  .stat-lbl { font-size: 11px; color: var(--muted); }
+
+  /* ===== SEARCH / FILTER ===== */
+  .toolbar {
+    padding: 16px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .search-box {
+    flex: 1;
+    min-width: 200px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 14px;
+    color: var(--text);
+    font-family: 'Tajawal', sans-serif;
+    font-size: 14px;
+    outline: none;
+    direction: rtl;
+  }
+  .search-box:focus { border-color: var(--accent); }
+  .filter-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: var(--muted);
+    font-family: 'Tajawal', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  /* ===== QUESTIONS ===== */
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::before {
+    content: '';
+    display: block;
+    width: 4px; height: 18px;
+    background: linear-gradient(var(--accent), var(--accent2));
+    border-radius: 2px;
+  }
+
+  .questions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+    gap: 16px;
+  }
+
+  @media (max-width: 540px) {
+    .questions-grid { grid-template-columns: 1fr; }
+  }
+
+  .q-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .q-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(var(--accent), var(--accent2));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .q-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 20px rgba(108,99,255,0.15);
+  }
+  .q-card:hover::before { opacity: 1; }
+
+  .q-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+  }
+
+  .q-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 12px;
+    direction: rtl;
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .option {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+    direction: rtl;
+  }
+
+  .option.correct {
+    background: rgba(0,200,122,0.12);
+    border-color: var(--correct);
+    color: var(--correct);
+    font-weight: 700;
+  }
+
+  .option-letter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px; height: 20px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--border);
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .option.correct .option-letter {
+    background: var(--correct);
+    color: #fff;
+  }
+
+  .check-icon {
+    margin-right: auto;
+    color: var(--correct);
+    font-size: 14px;
+    display: none;
+  }
+  .option.correct .check-icon { display: inline; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 30px;
+    color: var(--muted);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .footer span { color: var(--accent2); font-weight: 700; }
+
+  /* scroll top btn */
+  .scroll-top {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 44px; height: 44px;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(108,99,255,0.4);
+    transition: opacity 0.3s, transform 0.2s;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 99;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .scroll-top.visible { opacity: 1; pointer-events: auto; }
+  .scroll-top:hover { transform: scale(1.1); }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- ===== MUSIC PLAYER ===== -->
+<div class="music-bar">
+  <div class="music-brand">🎵 ELT STUDY</div>
+
+  <div class="music-controls">
+    <button class="btn-prev" onclick="prevTrack()">◂ السابق</button>
+    <button class="btn-play" id="playBtn" onclick="togglePlay()">▶</button>
+    <button class="btn-next" onclick="nextTrack()">التالي ▸</button>
+
+    <div class="track-info">
+      <span class="track-name" id="trackName">Wild Flower</span>
+      <span class="track-sub" id="trackSub">الأغنية 1 / 2</span>
+    </div>
+
+    <div class="progress-wrap">
+      <span class="time-label" id="timeNow">0:00</span>
+      <div class="progress-bar" id="progressBar" onclick="seekAudio(event)">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <span class="time-label" id="timeTot">0:00</span>
+    </div>
+
+    <div class="volume-wrap">
+      🔊 <input type="range" min="0" max="1" step="0.05" value="0.7" oninput="setVol(this.value)">
+    </div>
+  </div>
+</div>
+
+<audio id="audioEl"></audio>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div class="hero-badge">ELT Final — إعداد ياسر عمار عبد </div>
+  <h1>بنك أسئلة <span>MCQ</span> الشامل</h1>
+  <p>تدريس اللغة الإنجليزية — إدارة الصف — التطوير المهني</p>
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-num">150</div><div class="stat-lbl">سؤال / Question</div></div>
+    <div class="stat-box"><div class="stat-num">4</div><div class="stat-lbl">خيارات / Options</div></div>
+    <div class="stat-box"><div class="stat-num">🟢</div><div class="stat-lbl">الإجابة الصحيحة بالأخضر</div></div>
+  </div>
+</div>
+
+<!-- ===== TOOLBAR ===== -->
+<div class="toolbar">
+  <input class="search-box" type="text" placeholder="🔍  ابحث عن سؤال..." oninput="filterQ(this.value)">
+  <button class="filter-btn active" onclick="setFilter('all',this)">الكل (150)</button>
+</div>
+
+<!-- ===== QUESTIONS ===== -->
+<div class="container">
+  <div class="section-title">أسئلة الاختيار من متعدد — Bilingual MCQ Bank</div>
+  <div class="questions-grid" id="qGrid"></div>
+</div>
+
+<div class="footer">تم الإعداد بواسطة <span>ياسر عمار عبد </span> • مادة ELT • جميع الحقوق محفوظة</div>
+
+<button class="scroll-top" id="scrollBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲</button>
+
+<script>
+// ===== AUDIO PLAYER =====
+const tracks = [
+  { name: "Wild Flower", src: "https://files.catbox.moe/vf7aox.mp3" },
+  { name: "حبيبي بعيني الك دمعه", src: "https://files.catbox.moe/2lgasf.m4a" }
+];
+let current = 0;
+const audio = document.getElementById('audioEl');
+
+function loadTrack(i) {
+  current = i;
+  audio.src = tracks[i].src;
+  document.getElementById('trackName').textContent = tracks[i].name;
+  document.getElementById('trackSub').textContent = `الأغنية ${i+1} / ${tracks.length}`;
+  document.getElementById('playBtn').textContent = '▶';
+}
+
+function togglePlay() {
+  if (audio.paused) {
+    audio.play().catch(()=>{});
+    document.getElementById('playBtn').textContent = '⏸';
+  } else {
+    audio.pause();
+    document.getElementById('playBtn').textContent = '▶';
+  }
+}
+
+function nextTrack() {
+  loadTrack((current + 1) % tracks.length);
+  audio.play().catch(()=>{});
+  document.getElementById('playBtn').textContent = '⏸';
+}
+function prevTrack() {
+  loadTrack((current - 1 + tracks.length) % tracks.length);
+  audio.play().catch(()=>{});
+  document.getElementById('playBtn').textContent = '⏸';
+}
+
+function setVol(v) { audio.volume = v; }
+
+function fmtTime(s) {
+  if (isNaN(s)) return '0:00';
+  const m = Math.floor(s/60), sec = Math.floor(s%60);
+  return m+':'+(sec<10?'0':'')+sec;
+}
+
+audio.addEventListener('timeupdate', () => {
+  const pct = audio.duration ? (audio.currentTime / audio.duration * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('timeNow').textContent = fmtTime(audio.currentTime);
+  document.getElementById('timeTot').textContent = fmtTime(audio.duration);
+});
+
+audio.addEventListener('ended', nextTrack);
+
+function seekAudio(e) {
+  if (!audio.duration) return;
+  const bar = document.getElementById('progressBar');
+  const rect = bar.getBoundingClientRect();
+  const ratio = (rect.right - e.clientX) / rect.width;
+  audio.currentTime = ratio * audio.duration;
+}
+
+loadTrack(0);
+
+// ===== SCROLL TOP =====
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('scrollBtn');
+  btn.classList.toggle('visible', window.scrollY > 400);
+});
+
+// ===== QUESTIONS DATA =====
+const questions = [
+  // ---- FILE 1 & 2: Yoshi & Kathy comparison ----
+  {q:"What type of teaching style does Yoshi follow?\nما نوع أسلوب تدريس يوشي؟", opts:["Student-centered / متمركز حول الطالب","Teacher-centered / متمركز حول المعلم","Interactive / تفاعلي","Problem-based / قائم على المشكلات"], ans:1},
+  {q:"What type of teaching style does Kathy follow?\nما نوع أسلوب تدريس كاثي؟", opts:["Teacher-centered / متمركز حول المعلم","Textbook-only / الكتاب فقط","Student-centered / متمركز حول الطالب","Traditional / تقليدي"], ans:2},
+  {q:"Where does Yoshi teach English?\nأين يدرّس يوشي الإنجليزية؟", opts:["High school / مدرسة ثانوية","University / جامعة","Corporate setting / بيئة شركات","Primary school / مدرسة ابتدائية"], ans:2},
+  {q:"Where does Kathy teach English?\nأين تدرّس كاثي الإنجليزية؟", opts:["Corporate setting / بيئة شركات","High school / مدرسة ثانوية","University / جامعة","Online / عبر الإنترنت"], ans:1},
+  {q:"What does Yoshi mainly rely on in his lessons?\nعلى ماذا يعتمد يوشي أساساً في دروسه؟", opts:["Creative activities / أنشطة إبداعية","Student projects / مشاريع طلابية","Textbook and tapes / الكتاب والأشرطة","Group work / عمل جماعي"], ans:2},
+  {q:"Yoshi's students are described as:\nيوصف طلاب يوشي بأنهم:","opts":["Active / نشطون","Passive / سلبيون","Creative / مبدعون","Collaborative / متعاونون"], ans:1},
+  {q:"Kathy's students are described as:\nيوصف طلاب كاثي بأنهم:", opts:["Passive / سلبيون","Unmotivated / غير متحمسين","Active participants / مشاركون نشطون","Silent / صامتون"], ans:2},
+  {q:"Yoshi feels disheartened because of:\nيشعر يوشي بالإحباط بسبب:", opts:["Student misbehavior / سلوك الطلاب","Lack of textbooks / نقص الكتب","Teaching routine and no variety / الروتين","Classroom size / حجم الفصل"], ans:2},
+  {q:"What training did Kathy receive?\nما التدريب الذي تلقته كاثي؟", opts:["University diploma / دبلوم جامعي","Peace Corps intensive training / تدريب مكثف","Online course / دورة إلكترونية","No training / لا تدريب"], ans:1},
+  {q:"Yoshi assigns students to memorize:\nيكلف يوشي الطلاب بحفظ:", opts:["Grammar rules / قواعد النحو","Vocabulary / مفردات","Reading texts / نصوص","Dialogues / حوارات"], ans:1},
+  {q:"Kathy integrates which skills in her lessons?\nأي مهارات تدمج كاثي في دروسها؟", opts:["Only reading / القراءة فقط","Only listening / الاستماع فقط","All 4 skills / المهارات الأربع","Speaking and writing / التحدث والكتابة"], ans:2},
+  {q:"What is Kathy's nationality background?\nما خلفية كاثي من حيث اللغة؟", opts:["Non-native speaker / غير ناطقة أصلية","Native English speaker / ناطقة أصلية","Japanese / يابانية","Arabic speaker / ناطقة بالعربية"], ans:1},
+  {q:"What did Kathy study at university?\nماذا درست كاثي في الجامعة؟", opts:["English / اللغة الإنجليزية","Education / التربية","History / التاريخ","Geography / الجغرافيا"], ans:2},
+  {q:"What did Yoshi study in the US?\nماذا درس يوشي في أمريكا؟", opts:["History / التاريخ","Geography / الجغرافيا","English / اللغة الإنجليزية","Education / التربية"], ans:1},
+  {q:"Kathy's main goal is:\nالهدف الرئيسي لكاثي هو:", opts:["Cover textbook only / تغطية الكتاب فقط","Stimulate curiosity and interaction / تحفيز التفاعل","Memorize grammar / حفظ القواعد","Test students / اختبار الطلاب"], ans:1},
+  // ---- Self-Development Factors ----
+  {q:"How many self-development factors are listed?\nكم عاملاً للتطوير الذاتي ذُكر؟", opts:["5","6","7","8"], ans:2},
+  {q:"The first self-development factor is:\nأول عوامل التطوير الذاتي هو:", opts:["Exploration / الاستكشاف","Development needs Time / التطوير يحتاج وقتاً","Cooperation / التعاون","Problem solving / حل المشكلات"], ans:1},
+  {q:"'Ongoing commitment' in self-development means:\n'الالتزام المستمر' في التطوير يعني:", opts:["Study before teaching / الدراسة قبل التدريس","Development beyond initial training / التطوير بعد التدريب","Only reading books / قراءة الكتب فقط","Memorizing methods / حفظ الأساليب"], ans:1},
+  {q:"Problem solving as a self-development factor means:\nحل المشكلات كعامل تطوير يعني:", opts:["Ignoring challenges / تجاهل التحديات","Recognizing problems and finding new ways / إيجاد طرق جديدة","Following the textbook / اتباع الكتاب","Waiting for help / انتظار المساعدة"], ans:1},
+  {q:"Exploration in self-development involves:\nالاستكشاف في التطوير يتضمن:", opts:["Repeating old methods / تكرار الأساليب","Learning through curiosity and experimentation / التجريب","Strict routine / الروتين","Avoiding new ideas / تجنب الأفكار الجديدة"], ans:1},
+  {q:"'Reviewing the basics' refers to:\n'مراجعة الأساسيات' تشير إلى:", opts:["Continuous learning in EFL/ESL / التعلم المستمر","One-time training / تدريب لمرة واحدة","Ignoring theory / تجاهل النظرية","Memorizing textbooks / حفظ الكتب"], ans:0},
+  {q:"'Searching for opportunities' includes:\n'البحث عن الفرص' يتضمن:", opts:["Staying home / البقاء في البيت","Teaching, reading, observing, reflecting / التدريس والقراءة","Avoiding workshops / تجنب ورش العمل","Using one method / استخدام أسلوب واحد"], ans:1},
+  {q:"The 7th self-development factor is:\nالعامل السابع للتطوير الذاتي هو:", opts:["Problem solving / حل المشكلات","Exploration / الاستكشاف","Cooperation of others / تعاون الآخرين","Reviewing basics / مراجعة الأساسيات"], ans:2},
+  {q:"Without cooperation, self-development is:\nبدون التعاون، التطوير الذاتي يكون:", opts:["Easy / سهلاً","Very difficult / صعباً جداً","Unnecessary / غير ضروري","Fast / سريعاً"], ans:1},
+  {q:"Kathy attends teaching seminars to:\nتحضر كاثي الندوات التعليمية لـ:", opts:["Avoid students / تجنب الطلاب","Reflect on her teaching / التأمل في تدريسها","Only get certificates / الحصول على شهادات","Teach other teachers / تعليم المعلمين"], ans:1},
+  // ---- Roles of Native/Near-Native Teachers ----
+  {q:"What is 'Language Authority' role?\nما دور 'المرجع اللغوي'؟", opts:["Managing classroom / إدارة الصف","Explaining complex grammar rules / شرح القواعد","Testing students / اختبار الطلاب","Organizing groups / تنظيم المجموعات"], ans:1},
+  {q:"The 'Cultural Informant' role involves:\nدور 'مصدر المعلومات الثقافية' يتضمن:", opts:["Only teaching grammar / تعليم القواعد فقط","Answering about cultural values and beliefs / الإجابة عن القيم","Correcting pronunciation / تصحيح النطق","Giving homework / إعطاء الواجب"], ans:1},
+  {q:"A 'Model English Speaker' is a teacher who:\n'نموذج المتحدث' هو معلم:", opts:["Tests students daily / يختبر الطلاب يومياً","Serves as a model for students / يكون نموذجاً","Uses only textbooks / يستخدم الكتاب فقط","Speaks the L1 of students / يتكلم لغتهم"], ans:1},
+  {q:"A 'Needs Assessor' learns about:\n'مقيّم الاحتياجات' يتعرف على:", opts:["Grammar rules only / القواعد فقط","Students' goals, habits, learning styles / أهداف الطلاب","Classroom furniture / أثاث الفصل","School administration / إدارة المدرسة"], ans:1},
+  {q:"To assess needs, teachers are suggested to:\nللتقييم، يُقترح على المعلمين:", opts:["Give exams only / إعطاء امتحانات فقط","Interview students and use questionnaires / المقابلة والاستبيانات","Ignore student backgrounds / تجاهل خلفية الطلاب","Teach without planning / التدريس بدون تخطيط"], ans:1},
+  {q:"A 'Classroom Manager' needs to:\n'مدير الصف' يحتاج إلى:", opts:["Control student behavior only / السيطرة فقط","Engineer talk, questions, instructions / تنظيم الحديث والأسئلة","Use only one method / استخدام أسلوب واحد","Avoid group work / تجنب العمل الجماعي"], ans:1},
+  {q:"A 'Text Adaptor' goes beyond the text by:\n'مكيّف النص' يتجاوز الكتاب بـ:", opts:["Following it strictly / اتباعه بدقة","Adapting materials and adding new activities / تكييف المواد","Only reading it aloud / القراءة بصوت عالٍ","Skipping lessons / تخطي الدروس"], ans:1},
+  {q:"An 'Entertainer' teacher can:\nالمعلم 'الفسلي' يمكنه:", opts:["Increase student anxiety / زيادة قلق الطلاب","Lower anxiety and increase comprehension / تقليل القلق","Make lessons boring / جعل الدروس مملة","Replace the textbook / استبدال الكتاب"], ans:1},
+  // ---- Problems in EFL/ESL Teaching ----
+  {q:"What is 'the bandwagon problem'?\nما 'مشكلة الانجراف مع الآخرين'؟", opts:["Blindly following one method / اتباع أسلوب بشكل أعمى","Using too many methods / استخدام أساليب كثيرة","Ignoring the textbook / تجاهل الكتاب","Teaching without planning / التدريس بدون تخطيط"], ans:0},
+  {q:"Anxiety is associated with:\nالقلق مرتبط بـ:", opts:["Confidence and joy / الثقة والفرح","Uneasiness and self-doubt / عدم الارتياح والشك","High motivation / الدوافع القوية","Success in exams / النجاح في الامتحانات"], ans:1},
+  {q:"Which is NOT a reason for student anxiety?\nأيٌّ من الآتي ليس سبباً لقلق الطلاب؟", opts:["Inability to pronounce words / عدم القدرة على النطق","Peer criticism / انتقاد الزملاء","Enjoying interactive activities / الاستمتاع بالأنشطة","Oral testing / الاختبار الشفهي"], ans:2},
+  {q:"How can teacher reduce student anxiety?\nكيف يقلل المعلم قلق الطلاب؟", opts:["Criticize their performance / انتقاد أدائهم","Avoid criticism and use diaries / تجنب الانتقاد واليوميات","Give harder tests / إعطاء امتحانات صعبة","Use more grammar drills / استخدام تدريبات القواعد"], ans:1},
+  {q:"What is 'the engagement problem'?\nما 'مشكلة التفاعل'؟", opts:["Students talking too much / الطلاب يتكلمون كثيراً","Fear of interactive chaos / الخوف من فوضى التفاعل","Using wrong textbooks / استخدام كتب خاطئة","Too many students / طلاب كثيرون جداً"], ans:1},
+  {q:"To avoid engagement problem, teachers need:\nلتجنب مشكلة التفاعل يحتاج المعلمون:", opts:["Emotional maturity and sensitivity / النضج العاطفي والحساسية","More grammar tests / مزيد من امتحانات القواعد","Silent classrooms / صفوف صامتة","Strict punishment / عقاب صارم"], ans:0},
+  // ---- Classroom Management (File 5) ----
+  {q:"Classroom management refers to:\nإدارة الصف تشير إلى:", opts:["Controlling students / السيطرة على الطلاب","How teachers organize classroom events / تنظيم ما يحدث","Punishing bad behavior / معاقبة السلوك السيئ","Writing lesson plans / كتابة خطط الدروس"], ans:1},
+  {q:"The most powerful person in the classroom is:\nأكثر شخص تأثيراً في الصف هو:", opts:["The principal / المدير","The student / الطالب","The teacher / المعلم","The textbook / الكتاب"], ans:2},
+  {q:"The goal of classroom management is to:\nهدف إدارة الصف هو:", opts:["Control student behavior / التحكم بسلوك الطلاب","Create atmosphere for meaningful English interaction / خلق بيئة للتفاعل","Cover the textbook / تغطية الكتاب","Increase homework / زيادة الواجبات"], ans:1},
+  {q:"Factors creating classroom interaction include:\nمن العوامل التي تخلق تفاعل الصف:", opts:["Student appearance / مظهر الطلاب","How much the teacher talks / مقدار كلام المعلم","School rules / قوانين المدرسة","Classroom color / لون الفصل"], ans:1},
+  {q:"Teacher talk should be:\nيجب أن يكون كلام المعلم:", opts:["Long and detailed / طويلاً ومفصلاً","Purposeful and meaningful / هادفاً وذا معنى","Mostly in L1 / بالأغلب باللغة الأم","Minimal and silent / قليلاً وصامتاً"], ans:1},
+  {q:"Long speeches by the teacher may:\nالخطب الطويلة من المعلم قد:", opts:["Increase motivation / تزيد الدافعية","Confuse students or make them passive / تربك الطلاب","Help all students / تساعد الطلاب","Improve interaction / تحسن التفاعل"], ans:1},
+  {q:"Display questions are questions where:\nأسئلة العرض هي أسئلة:", opts:["Teacher does not know the answer / المعلم لا يعرف الإجابة","Teacher already knows the answer / المعلم يعرف الإجابة","Students ask the teacher / الطلاب يسألون المعلم","Used only for exams / للامتحانات فقط"], ans:1},
+  {q:"Referential questions are questions where:\nالأسئلة المرجعية هي أسئلة:", opts:["Teacher knows the answer / المعلم يعرف الإجابة","Teacher does NOT know the answer / المعلم لا يعرف","Students cannot answer / الطلاب لا يستطيعون","Used to practice grammar / لتدريب القواعد"], ans:1},
+  {q:"'Do you understand?' is an example of:\n'هل تفهم؟' مثال على:", opts:["Display question / سؤال عرض","Referential question / سؤال مرجعي","Comprehension check / التحقق من الفهم","Confirmation question / سؤال التأكيد"], ans:2},
+  {q:"'What is your favorite color?' is an example of:\n'ما لونك المفضل؟' مثال على:", opts:["Display question / سؤال عرض","Referential question / سؤال مرجعي","Comprehension check / التحقق من الفهم","Clarification question / سؤال توضيح"], ans:1},
+  {q:"A confirmation question aims to:\nسؤال التأكيد يهدف إلى:", opts:["Display knowledge / إظهار المعرفة","Verify what was said / التحقق مما قيل","Clarify meaning / توضيح المعنى","Test comprehension / اختبار الفهم"], ans:1},
+  {q:"A clarification question aims to:\nسؤال التوضيح يهدف إلى:", opts:["Check grammar / التحقق من القواعد","Make meaning clearer / جعل المعنى أوضح","Verify what was said / التحقق","Display knowledge / إظهار المعرفة"], ans:1},
+  {q:"Questions can include which content areas?\nأي مجالات يمكن أن تتضمنها الأسئلة؟", opts:["Only grammar / القواعد فقط","Study, procedure, and life / الدراسة والإجراءات والحياة","Only personal / الشخصية فقط","Only classroom rules / قوانين الصف فقط"], ans:1},
+  {q:"'Did you do your homework?' is a:\n'هل أنجزت واجبك؟' هو:", opts:["Life-personal question / سؤال حياة شخصية","Display question / سؤال عرض","Procedure question / سؤال إجراء","Referential question / سؤال مرجعي"], ans:2},
+  {q:"'How do Iraqis celebrate birthdays?' is a:\n'كيف يحتفل العراقيون بأعياد الميلاد؟' هو:", opts:["Life-general question / سؤال حياة عامة","Display question / سؤال عرض","Procedure question / سؤال إجراء","Clarification question / سؤال توضيح"], ans:0},
+  {q:"When teachers use longer wait time, students:\nعندما ينتظر المعلم أطول، الطلاب:", opts:["Give shorter answers / يعطون إجابات أقصر","Give longer and more inferences / يعطون إجابات أطول","Stop participating / يتوقفون","Ask fewer questions / يطرحون أسئلة أقل"], ans:1},
+  {q:"Three ways to make language comprehensible are:\nثلاث طرق لجعل اللغة مفهومة هي:", opts:["Test, drill, memorize / الاختبار والحفظ","Simplify speech, add mediums, negotiate meaning / تبسيط الكلام","Translate, explain, repeat / الترجمة والشرح","Speak slowly, stop, start again / التكلم ببطء"], ans:1},
+  {q:"'Foreigner talk' includes:\n'حديث الأجانب' يتضمن:", opts:["Fast speech and complex grammar / الكلام السريع","Slower speech and exaggerated pronunciation / الكلام البطيء والنطق المبالغ","Silent teaching / التعليم الصامت","Only visual aids / الوسائل البصرية فقط"], ans:1},
+  {q:"Mediums in teaching include:\nالوسائل في التدريس تشمل:", opts:["Only speech / الكلام فقط","Linguistic aural, visual, nonlinguistic, paralinguistic / جميع الوسائل","Only written texts / النصوص المكتوبة فقط","Only gestures / الإيماءات فقط"], ans:1},
+  {q:"Negotiating meaning involves:\nالتفاوض على المعنى يتضمن:", opts:["Avoiding questions / تجنب الأسئلة","Using clarification and confirmation questions / التوضيح والتأكيد","Translating everything / ترجمة كل شيء","Giving long lectures / إلقاء محاضرات طويلة"], ans:1},
+  // ---- Classroom Organization ----
+  {q:"Grouping students by ability means:\nتجميع الطلاب حسب القدرة يعني:", opts:["By favorite color / حسب اللون المفضل","Fluent vs not fluent / طليق وغير طليق","By personality / حسب الشخصية","Randomly / عشوائياً"], ans:1},
+  {q:"Grouping by lottery means:\nالتجميع بالقرعة يعني:", opts:["By ability / حسب القدرة","By same colored dot or number / بنفس النقطة أو الرقم","By personality / حسب الشخصية","By location / حسب الموقع"], ans:1},
+  {q:"Self-selected groups are groups where:\nالمجموعات التي يختارها الطلاب هي:", opts:["Teacher assigns groups / المعلم يحدد المجموعات","Students choose their own groups / الطلاب يختارون","Random lottery / قرعة عشوائية","Based on grades / حسب الدرجات"], ans:1},
+  {q:"To keep students on task, teachers should:\nلإبقاء الطلاب على المهمة يجب على المعلمين:", opts:["Give unclear instructions / إعطاء تعليمات غامضة","Set clear goals and time limits / تحديد أهداف وحدود زمنية","Let students do anything / السماح لهم بأي شيء","Stop the activity early / إيقاف النشاط مبكراً"], ans:1},
+  {q:"Which is a way to give instructions?\nأيٌّ من الآتي طريقة لإعطاء التعليمات؟", opts:["Ignoring students / تجاهل الطلاب","Miming the instructions / تمثيل التعليمات بالإيماء","Only speaking Arabic / التكلم بالعربية فقط","Writing exam questions / كتابة أسئلة الامتحان"], ans:1},
+  {q:"The 'whisper chain' instruction method involves:\nطريقة 'سلسلة الهمس' تتضمن:", opts:["Writing on the board / الكتابة على السبورة","Whispering instructions student to student / همس التعليمات","Playing music / تشغيل الموسيقى","Giving printed sheets / توزيع أوراق مطبوعة"], ans:1},
+  {q:"The 'I never have enough time' problem is solved by:\nمشكلة 'لا أملك وقتاً كافياً' تُحل بـ:", opts:["Teaching faster / التدريس بشكل أسرع","Building time constraints into lesson plans / وضع حدود زمنية","Cancelling activities / إلغاء الأنشطة","Using fewer questions / استخدام أسئلة أقل"], ans:1},
+  {q:"To get students to use more English, teachers should:\nلجعل الطلاب يستخدمون الإنجليزية أكثر:", opts:["Force them to speak / إجبارهم على الكلام","Negotiate and gain their trust / التفاوض وكسب ثقتهم","Punish those using L1 / معاقبة من يستخدم اللغة الأم","Ignore the issue / تجاهل المشكلة"], ans:1},
+  {q:"The 'name remembering' problem is one of the:\nمشكلة 'تذكر الأسماء' إحدى:", opts:["Self-development factors / عوامل التطوير الذاتي","Common classroom management problems / مشكلات إدارة الصف","Grammar teaching issues / قضايا تدريس القواعد","Textbook problems / مشكلات الكتاب"], ans:1},
+  // ---- Ways to Explore Teaching ----
+  {q:"Reading journal articles about teaching helps:\nقراءة مقالات المجلات عن التدريس تساعد على:", opts:["Avoiding students / تجنب الطلاب","Developing teaching knowledge / تطوير معرفة التدريس","Memorizing grammar rules / حفظ قواعد النحو","Completing the textbook / إنهاء الكتاب"], ans:1},
+  {q:"Teacher narratives offer:\nروايات المعلمين تقدم:", opts:["Grammar exercises / تمارين قواعد","Glimpses into the realities of teaching / لمحات عن واقع التدريس","Exam preparation / التحضير للامتحانات","Classroom rules / قوانين الصف"], ans:1},
+  {q:"Professional conferences are good for:\nالمؤتمرات المهنية مفيدة لـ:", opts:["Resting from teaching / الراحة من التدريس","Sharing classroom techniques and action research / مشاركة الأبحاث","Completing homework / إنهاء الواجب","Testing students / اختبار الطلاب"], ans:1},
+  {q:"A teaching portfolio helps teachers:\nملف إنجاز التدريس يساعد المعلمين على:", opts:["Getting more students / الحصول على طلاب أكثر","Making sense of what they learned / فهم ما تعلموه","Avoiding professional development / تجنب التطوير","Covering more content / تغطية محتوى أكثر"], ans:1},
+  {q:"What should a teaching portfolio include?\nماذا يجب أن يتضمن ملف إنجاز التدريس؟", opts:["Only exam results / نتائج الامتحانات فقط","Papers, presentations, reflective journals, syllabi / أوراق وعروض ويوميات","Student homework / واجبات الطلاب","Grammar notes only / ملاحظات القواعد فقط"], ans:1},
+  {q:"Learning another language helps teachers:\nتعلم لغة أخرى يساعد المعلمين على:", opts:["Replacing English / استبدال الإنجليزية","Understanding learners' challenges better / فهم تحديات المتعلمين","Teaching faster / التدريس بشكل أسرع","Avoiding lesson plans / تجنب الخطط"], ans:1},
+  {q:"Action research in teaching helps to:\nبحث الإجراء في التدريس يساعد على:", opts:["Replace textbooks / استبدال الكتب","Investigate and solve classroom problems / التحقيق وحل مشكلات الصف","Memorize teaching theories / حفظ نظريات التدريس","Avoid observations / تجنب الملاحظات"], ans:1},
+  {q:"Establishing a mentoring relationship means:\nإنشاء علاقة إرشاد تعني:", opts:["Teaching alone without help / التدريس بمفردك","A new approach with a long history / نهج جديد له تاريخ طويل","Avoiding other teachers / تجنب المعلمين الآخرين","Only reading books / قراءة الكتب فقط"], ans:1},
+  // ---- More detailed MCQ ----
+  {q:"Kathy posts pictures on walls to:\nكاثي تضع صوراً على الجدران لـ:", opts:["Decorate the room / تزيين الغرفة","Encourage spontaneous English / تشجيع الإنجليزية العفوية","Show student artwork / عرض أعمال الطلاب","Replace the textbook / استبدال الكتاب"], ans:1},
+  {q:"Kathy writes messages on the board to:\nكاثي تكتب رسائل على السبورة لـ:", opts:["Show her authority / إظهار سلطتها","Save time at the start of class / توفير الوقت في البداية","Practice handwriting / تدريب الخط","Test students / اختبار الطلاب"], ans:1},
+  {q:"Yoshi's students take notes in:\nطلاب يوشي يدونون ملاحظاتهم بـ:", opts:["English / الإنجليزية","Arabic / العربية","Japanese / اليابانية","Both languages / اللغتين"], ans:2},
+  {q:"Yoshi's teaching sequence is:\nتسلسل تدريس يوشي هو:", opts:["Write → Read → Discuss / اكتب اقرأ ناقش","Tape → Reading → Q&A → Discussion / شريط قراءة أسئلة نقاش","Discuss → Read → Write / ناقش اقرأ اكتب","Quiz → Lecture → Activity / امتحان محاضرة نشاط"], ans:1},
+  {q:"Kathy creates what kind of classroom community?\nكاثي تخلق أي نوع من مجتمع الفصل؟", opts:["Silent learners / متعلمون صامتون","Community of learners / مجتمع من المتعلمين","Competitive learners / متعلمون تنافسيون","Individual learners / متعلمون فرديون"], ans:1},
+  {q:"Yoshi's students are mostly:\nطلاب يوشي معظمهم:", opts:["Women / نساء","Children / أطفال","Intermediate-advanced men / رجال متوسطو المستوى","Beginners / مبتدئون"], ans:2},
+  {q:"Kathy's students are described as:\nطلاب كاثي يوصفون بأنهم:", opts:["Beginners / مبتدئون","Intermediate / متوسطون","Advanced English users / متقدمون في الإنجليزية","Non-English speakers / غير ناطقين بالإنجليزية"], ans:2},
+  {q:"What makes teacher questioning important?\nما الذي يجعل أسئلة المعلم مهمة؟", opts:["It wastes time / تضيع الوقت","It stimulates meaningful communication / تحفز التواصل الهادف","It replaces the textbook / تستبدل الكتاب","It tests grammar only / تختبر القواعد فقط"], ans:1},
+  {q:"'Study of Language' questions ask about:\nأسئلة 'دراسة اللغة' تسأل عن:", opts:["Student personal life / الحياة الشخصية","Aspects of grammar or vocabulary / جوانب القواعد أو المفردات","Classroom procedures / إجراءات الصف","Cultural events / الأحداث الثقافية"], ans:1},
+  {q:"'Study of Subject' questions use language to:\nأسئلة 'دراسة الموضوع' تستخدم اللغة لـ:", opts:["Only practice grammar / تدريب القواعد فقط","Learn content beyond the language itself / تعلم محتوى خارج اللغة","Test pronunciation / اختبار النطق","Review homework / مراجعة الواجب"], ans:1},
+  {q:"Comprehension checks are:\nالتحقق من الفهم:", opts:["More common outside classrooms / أكثر شيوعاً خارج الصف","Less common outside classrooms / أقل شيوعاً خارج الصف","Never used / لا تُستخدم أبداً","Only used in exams / تُستخدم في الامتحانات فقط"], ans:1},
+  {q:"A better comprehension check strategy is:\nاستراتيجية أفضل للتحقق من الفهم هي:", opts:["Asking 'Do you understand?' / السؤال 'هل تفهم؟'","Asking students to paraphrase / طلب إعادة الصياغة","Giving a written test / إعطاء اختبار كتابي","Repeating the lesson / تكرار الدرس"], ans:1},
+  {q:"Simplifying speech includes:\nتبسيط الكلام يتضمن:", opts:["Using complex vocabulary / استخدام مفردات معقدة","Slower speech, gestures, pauses / الكلام البطيء والإيماءات","Speaking only English / التكلم بالإنجليزية فقط","Avoiding repetition / تجنب التكرار"], ans:1},
+  {q:"Organizing group movement efficiently saves:\nتنظيم حركة المجموعات بكفاءة يوفر:", opts:["Student energy / طاقة الطلاب","Much classroom time / الكثير من وقت الصف","Textbook pages / صفحات الكتاب","Homework time / وقت الواجب"], ans:1},
+  {q:"Which is NOT a way to group students?\nأيٌّ من الآتي ليس طريقة لتجميع الطلاب؟", opts:["By ability / حسب القدرة","By lottery / بالقرعة","By hair color / حسب لون الشعر","By personality / حسب الشخصية"], ans:2},
+  {q:"Teachers should consider 'wait time' because:\nيجب على المعلمين مراعاة 'وقت الانتظار' لأن:", opts:["It gives teacher time to think / يعطي المعلم وقتاً للتفكير","It leads to better student responses / يؤدي إلى إجابات أفضل","It reduces the number of questions / يقلل عدد الأسئلة","It fills classroom time / يملأ وقت الصف"], ans:1},
+  {q:"Adding mediums to lessons means:\nإضافة الوسائل إلى الدروس تعني:", opts:["Only using a projector / استخدام جهاز عرض فقط","Combining different types of aural and visual media / دمج أنواع مختلفة من الوسائل","Translating everything / ترجمة كل شيء","Removing the textbook / إزالة الكتاب"], ans:1},
+  {q:"Paralinguistic mediums include:\nالوسائل شبه اللغوية تشمل:", opts:["Written texts / النصوص المكتوبة","Gestures, eye contact, touch / الإيماءات والتواصل البصري","Audio recordings / التسجيلات الصوتية","Printed books / الكتب المطبوعة"], ans:1},
+  {q:"Role plays and games are examples of:\nتمثيل الأدوار والألعاب أمثلة على:", opts:["Textbook-only activities / أنشطة الكتاب فقط","Text adaptor activities / أنشطة مكيّف النص","Grammar drills / تدريبات القواعد","Testing activities / أنشطة اختبارية"], ans:1},
+  {q:"Kathy's background includes:\nخلفية كاثي تتضمن:", opts:["Corporate training / تدريب تجاري","Peace Corps and history degree / فرق السلام ودرجة تاريخ","Teaching in Japan / التدريس في اليابان","English language degree / درجة اللغة الإنجليزية"], ans:1},
+  {q:"Yoshi's students show low motivation because:\nطلاب يوشي يُظهرون تحفيزاً منخفضاً بسبب:", opts:["Kathy's methods / أساليب كاثي","Corporate setting / بيئة الشركات","Advanced level / المستوى المتقدم","Short lessons / الدروس القصيرة"], ans:1},
+  {q:"The key message about teacher self-development is:\nالرسالة الرئيسية عن التطوير الذاتي للمعلم:", opts:["It is optional / هو اختياري","The more teachers grow, the more students grow / كلما نما المعلمون","It stops after training / يتوقف بعد التدريب","It is only about reading / يتعلق بالقراءة فقط"], ans:1},
+  // ---- Extra mixed questions ----
+  {q:"What does EFL stand for?\nماذا تعني EFL؟", opts:["English For Life / الإنجليزية للحياة","English as a Foreign Language / الإنجليزية لغة أجنبية","English For Learners / الإنجليزية للمتعلمين","English For Listening / الإنجليزية للاستماع"], ans:1},
+  {q:"What does ESL stand for?\nماذا تعني ESL؟", opts:["English as a Second Language / الإنجليزية لغة ثانية","English as a Spoken Language / الإنجليزية لغة منطوقة","English Skills for Learning / مهارات للتعلم","English as a Simple Language / الإنجليزية بسيطة"], ans:0},
+  {q:"The bandwagon problem can stop teachers from:\nمشكلة الانجراف يمكنها إيقاف المعلمين عن:", opts:["Reading books / قراءة الكتب","Genuine classroom interaction / التفاعل الحقيقي","Using the textbook / استخدام الكتاب","Giving homework / إعطاء الواجب"], ans:1},
+  {q:"Student anxiety can be caused by:\nقلق الطلاب يمكن أن يكون بسبب:", opts:["Clear instructions / التعليمات الواضحة","Encountering different cultural values / مواجهة قيم ثقافية مختلفة","Fun activities / الأنشطة الممتعة","Easy tasks / المهام السهلة"], ans:1},
+  {q:"Personal diaries help students feel:\nاليوميات الشخصية تساعد الطلاب على الشعور:", opts:["More anxious / بقلق أكثر","Less alone in emotional distress / أقل وحدة في الضائقة","Bored / بالملل","Competitive / بالتنافس"], ans:1},
+  {q:"Which factor influences classroom interaction?\nأي عامل يؤثر على تفاعل الصف؟", opts:["Student height / طول الطلاب","How teacher gives instructions / كيف يعطي المعلم التعليمات","Classroom paint color / لون طلاء الفصل","Student age only / عمر الطلاب فقط"], ans:1},
+  {q:"A text adaptor adds to lessons:\nمكيّف النص يضيف إلى الدروس:", opts:["Only grammar exercises / تمارين القواعد فقط","Role plays, songs, games, movies / تمثيل الأدوار والأغاني والألعاب","Only textbook readings / قراءات الكتاب فقط","Translation activities / أنشطة الترجمة"], ans:1},
+  {q:"Kathy's approach reflects:\nنهج كاثي يعكس:", opts:["Structured tradition / التقاليد المنظمة","Active professional growth / النمو المهني النشط","Teacher-centered methods / أساليب متمركزة حول المعلم","Passive learning / التعلم السلبي"], ans:1},
+  {q:"Yoshi's approach reflects:\nنهج يوشي يعكس:", opts:["Active professional growth / النمو المهني النشط","Student-centered learning / التعلم المتمركز حول الطالب","Structured tradition / التقاليد المنظمة","Innovative methods / الأساليب المبتكرة"], ans:2},
+  {q:"The engagement problem is caused by:\nمشكلة التفاعل تنتج عن:", opts:["Too many students / طلاب كثيرون","Fear of chaos in interactive classrooms / الخوف من الفوضى","Poor textbooks / كتب ضعيفة","Short class time / وقت الصف القصير"], ans:1},
+  {q:"Keeping students on task requires:\nإبقاء الطلاب على المهمة يتطلب:", opts:["Ignoring distractions / تجاهل المشتتات","Clear goals and interesting tasks / أهداف واضحة ومهام مثيرة","Only strict rules / القواعد الصارمة فقط","Punishing off-task students / معاقبة الطلاب"], ans:1},
+  {q:"Reflecting on teaching time helps:\nالتأمل في وقت التدريس يساعد على:", opts:["Finishing the textbook faster / إنهاء الكتاب أسرع","Using time differently next time / استخدام الوقت بشكل مختلف","Avoiding group work / تجنب العمل الجماعي","Giving more tests / إعطاء امتحانات أكثر"], ans:1},
+  {q:"What is the role of the teacher as 'needs assessor'?\nما دور المعلم كـ'مقيّم الاحتياجات'؟", opts:["Assess student exams / تقييم امتحانات الطلاب","Learn about students' backgrounds and goals / معرفة خلفيات الطلاب","Grade homework / تصحيح الواجبات","Teach only what is in the textbook / التدريس من الكتاب فقط"], ans:1},
+  {q:"Assigning roles in group work (like timekeeper) helps:\nتعيين أدوار في العمل الجماعي يساعد على:", opts:["Reducing interaction / تقليل التفاعل","Keeping students on task / إبقاء الطلاب على المهمة","Creating confusion / إحداث ارتباك","Increasing anxiety / زيادة القلق"], ans:1},
+  {q:"Authentic materials in teaching include:\nالمواد الأصيلة في التدريس تشمل:", opts:["Grammar workbooks / كتب تمارين القواعد","Newspaper articles, maps, letters / مقالات الصحف والخرائط والرسائل","Translation dictionaries / قواميس الترجمة","Only textbook exercises / تمارين الكتاب فقط"], ans:1},
+  {q:"Self-development is described as:\nالتطوير الذاتي يوصف بأنه:", opts:["One-time event / حدث مرة واحدة","Continuous process / عملية مستمرة","Only during teacher training / فقط أثناء تدريب المعلم","Optional for experienced teachers / اختياري للمعلمين ذوي الخبرة"], ans:1},
+  {q:"Kathy continues to study ways to:\nكاثي تستمر في دراسة طرق لـ:", opts:["Cover more textbook material / تغطية مواد الكتاب","Create interaction opportunities in English / خلق فرص للتفاعل باللغة الإنجليزية","Reduce class time / تقليل وقت الصف","Assign more homework / إعطاء واجبات أكثر"], ans:1},
+  {q:"Productive teacher talk can include:\nكلام المعلم المنتج يمكن أن يتضمن:", opts:["Long unrelated stories / قصص طويلة غير ذات صلة","Dictation as listening activity / الإملاء كنشاط استماع","Only grammar explanation / شرح القواعد فقط","Silent periods / فترات صمت"], ans:1},
+  {q:"Life-personal questions are about:\nأسئلة الحياة الشخصية تتعلق بـ:", opts:["General groups of people / مجموعات عامة من الناس","Individual students' lives / حياة الطلاب الفرديين","Grammar and vocabulary / القواعد والمفردات","Classroom procedures / إجراءات الصف"], ans:1},
+  {q:"Setting time limits in activities helps:\nوضع حدود زمنية في الأنشطة يساعد على:", opts:["Confusing students / إرباك الطلاب","Efficient time management / إدارة الوقت بكفاءة","Reducing interaction / تقليل التفاعل","Increasing anxiety / زيادة القلق"], ans:1},
+  {q:"Teachers talking too much can:\nتكلم المعلم كثيراً يمكن أن:", opts:["Increase meaningful interaction / يزيد التفاعل الهادف","Make students passive / يجعل الطلاب سلبيين","Improve grammar / يحسن القواعد","Motivate students / يحفز الطلاب"], ans:1},
+  {q:"Kathy's Peace Corps training focused on:\nتدريب فرق السلام لكاثي ركز على:", opts:["Grammar teaching only / تدريس القواعد فقط","Cultural assimilation and EFL teaching / الاستيعاب الثقافي وتدريس الإنجليزية","Business English / الإنجليزية التجارية","Testing and assessment / الاختبار والتقييم"], ans:1},
+  {q:"The 'community of learners' concept means:\nمفهوم 'مجتمع المتعلمين' يعني:", opts:["Students learning alone / الطلاب يتعلمون بمفردهم","Open, collaborative learning environment / بيئة تعلم تعاونية ومنفتحة","Strict classroom rules / قوانين صف صارمة","Teacher-centered instruction / تعليم متمركز حول المعلم"], ans:1},
+  {q:"Effective questioning stimulates:\nالأسئلة الفعالة تحفز:", opts:["Silence in the classroom / الصمت في الصف","Communication and meaningful interaction / التواصل والتفاعل الهادف","More teacher talk / كلام المعلم أكثر","Grammar memorization / حفظ القواعد"], ans:1},
+  {q:"Which is a benefit of display questions?\nأيٌّ من الآتي فائدة لأسئلة العرض؟", opts:["Bring real questions to class / إحضار أسئلة حقيقية","Practice language and drill students / تدريب الطلاب على اللغة","Learn about students personally / معرفة الطلاب شخصياً","Encourage natural communication / تشجيع التواصل الطبيعي"], ans:1},
+  {q:"Which is a benefit of referential questions?\nأيٌّ من الآتي فائدة للأسئلة المرجعية؟", opts:["Test grammar knowledge / اختبار معرفة القواعد","Encourage real interaction / تشجيع التفاعل الحقيقي","Practice pronunciation / تدريب النطق","Check homework completion / التحقق من الواجب"], ans:1},
+  {q:"Separating the meaning of 'classroom management' from 'control' emphasizes:\nالفصل بين إدارة الصف والسيطرة يؤكد على:", opts:["Punishment as a tool / العقوبة كأداة","Organizing for learning, not controlling / التنظيم للتعلم","Strict discipline / الانضباط الصارم","Teacher authority / سلطة المعلم"], ans:1},
+  {q:"Kathy encourages students to use:\nكاثي تشجع الطلاب على استخدام:", opts:["Japanese only / اليابانية فقط","Spontaneous English / الإنجليزية العفوية","Written notes / الملاحظات المكتوبة","Grammar books / كتب القواعد"], ans:1},
+  {q:"The 'cultural informant' role is important because students ask about:\nدور 'مصدر المعلومات الثقافية' مهم لأن الطلاب يسألون عن:", opts:["Grammar rules only / القواعد النحوية فقط","Cultural values, beliefs, and assumptions / القيم والمعتقدات","School administration / إدارة المدرسة","Exam preparation / التحضير للامتحان"], ans:1},
+  {q:"Action research in teaching means:\nبحث الإجراء في التدريس يعني:", opts:["Reading about other teachers / القراءة عن مدرسين آخرين","Investigating your own classroom problems / التحقيق في مشكلاتك الخاصة","Following a set curriculum / اتباع منهج محدد","Attending conferences / حضور المؤتمرات"], ans:1},
+  {q:"What does 'orchestrate group and pair work' mean?\nماذا يعني 'تنظيم عمل المجموعات والثنائي'؟", opts:["Play music for students / تشغيل موسيقى للطلاب","Manage how groups and pairs work / إدارة كيفية عمل المجموعات","Only use pair activities / استخدام أنشطة ثنائية فقط","Assign one group only / تعيين مجموعة واحدة فقط"], ans:1},
+  {q:"Kathy focuses on creating what kind of classroom?\nكاثي تركز على خلق أي نوع من الفصول الدراسية؟", opts:["Exam-focused / متمركز حول الامتحانات","Learner-centered / متمركز حول المتعلم","Teacher-controlled / يتحكم فيه المعلم","Grammar-focused / متمركز حول القواعد"], ans:1},
+  {q:"Handling affective variables in classroom means:\nالتعامل مع المتغيرات العاطفية في الصف يعني:", opts:["Ignoring student feelings / تجاهل مشاعر الطلاب","Managing emotional and psychological aspects / إدارة الجوانب العاطفية والنفسية","Only focusing on grammar / التركيز على القواعد فقط","Giving rewards / إعطاء مكافآت"], ans:1},
+  {q:"Which is a nonlinguistic visual medium?\nأيٌّ من الآتي وسيلة بصرية غير لغوية؟", opts:["Written text / النص المكتوب","Speech / الكلام","Pictures and objects / الصور والأشياء","Grammar rules / قواعد النحو"], ans:2},
+  {q:"A teacher who 'simplifies speech' uses:\nالمعلم الذي 'يبسط الكلام' يستخدم:", opts:["Complex sentences / جمل معقدة","Slower speech and gestures / الكلام البطيء والإيماءات","Only the textbook / الكتاب المدرسي فقط","Only L1 translation / الترجمة للغة الأم فقط"], ans:1},
+  {q:"Why should teachers reflect on their teaching after lessons?\nلماذا يجب على المعلمين التأمل بعد الدروس؟", opts:["To write reports / لكتابة تقارير","To improve future lessons / لتحسين الدروس المستقبلية","To give more homework / لإعطاء واجبات أكثر","To plan exams / للتخطيط للامتحانات"], ans:1},
+  {q:"The goal of using referential questions is to:\nهدف استخدام الأسئلة المرجعية هو:", opts:["Drill students on grammar / تدريب الطلاب على القواعد","Show genuine interest and stimulate communication / إظهار الاهتمام وتحفيز التواصل","Check if homework is done / التحقق من الواجب","Test vocabulary knowledge / اختبار معرفة المفردات"], ans:1},
+  {q:"The 'lockstep' approach in Yoshi's teaching means:\nأسلوب 'الخطوات الصارمة' في تدريس يوشي يعني:", opts:["Very flexible lessons / دروس مرنة جداً","Following a strict, fixed routine / اتباع روتين صارم وثابت","Student-led activities / أنشطة يقودها الطلاب","Creative and innovative lessons / دروس إبداعية"], ans:1},
+  {q:"Kathy's lesson planning is described as:\nتخطيط دروس كاثي يوصف بأنه:", opts:["Lockstep and structured / صارم ومنظم","Innovative and flexible / مبتكر ومرن","Textbook-only / الكتاب فقط","Grammar-focused / متمركز حول القواعد"], ans:1},
+  {q:"Which is true about Yoshi's classroom environment?\nأيٌّ من الآتي صحيح عن بيئة صف يوشي؟", opts:["Open and collaborative / منفتحة وتعاونية","Formal and teacher-led / رسمية يقودها المعلم","Student-centered / متمركزة حول الطالب","Creative and experimental / إبداعية وتجريبية"], ans:1},
+  {q:"When teachers know 'how to give instructions,' they can:\nعندما يعرف المعلمون 'كيفية إعطاء التعليمات' يمكنهم:", opts:["Confuse students / إرباك الطلاب","Control the way students receive them / التحكم في طريقة استقبال الطلاب","Reduce lesson time / تقليل وقت الدرس","Only teach grammar / تدريس القواعد فقط"], ans:1},
+  {q:"The purpose of 'study questions' in the classroom is to:\nهدف 'أسئلة الدراسة' في الصف هو:", opts:["Ask about student personal life / السؤال عن الحياة الشخصية","Ask about language or subject content / السؤال عن اللغة أو المحتوى","Check attendance / التحقق من الحضور","Organize group activities / تنظيم أنشطة المجموعات"], ans:1},
+  {q:"The statement 'Teacher talk should be selective' means:\nعبارة 'يجب أن يكون كلام المعلم انتقائياً' تعني:", opts:["Speak in only one language / التكلم بلغة واحدة","Choose what to say purposefully / اختيار ما يقال بهدف","Speak as much as possible / التكلم قدر الإمكان","Avoid all classroom talk / تجنب الكلام في الصف"], ans:1},
+];
+
+// ===== RENDER =====
+const grid = document.getElementById('qGrid');
+
+function renderAll(list) {
+  grid.innerHTML = '';
+  list.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    const letters = ['أ','ب','ج','د'];
+    const optHtml = q.opts.map((o, oi) => `
+      <div class="option ${oi === q.ans ? 'correct' : ''}">
+        <span class="option-letter">${letters[oi]}</span>
+        <span>${o}</span>
+        <span class="check-icon">✓</span>
+      </div>`).join('');
+    card.innerHTML = `
+      <span class="q-num">${i+1}</span>
+      <div class="q-text">${q.q}</div>
+      <div class="options">${optHtml}</div>`;
+    grid.appendChild(card);
+  });
+}
+
+renderAll(questions);
+
+// ===== SEARCH =====
+function filterQ(val) {
+  const v = val.trim().toLowerCase();
+  const cards = grid.querySelectorAll('.q-card');
+  cards.forEach(c => {
+    const txt = c.querySelector('.q-text').textContent.toLowerCase();
+    c.classList.toggle('hidden', v && !txt.includes(v));
+  });
+}
+
+function setFilter(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
